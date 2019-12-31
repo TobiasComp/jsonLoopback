@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>tryung to get it</title>
+
+<body>
+  <div class="info">
+    <h1>shuki show all</h1>
+    <h2>here Read|Get, Delete|Delete</h2>
+    <h4>Read|Get for single item in the form</h4>
+    <h2>click and item for Create|Post, Update|Put</h2>
+  </div>
+
+  <div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>age</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <dialog>
+    <p>name</p>
+  </dialog>
+
+  <script>
+
+    function getAllUsers() {
+      var x = new XMLHttpRequest();
+      x.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          let arr = JSON.parse(this.responseText)
+          let t = document.querySelector('table tbody')
+          arr.forEach(u => {
+            t.innerHTML += '<tr>' +
+              '<td>' + u.id + '</td>' +
+              '<td>' + u.name + '</td>' +
+              '<td>' + u.email + '</td>' +
+              '<td><button onclick="delsky(' + u.id + ', event)">delete</button></td>' +
+              '</tr>';
+          });
+
+          setDialogAndClicks()
+        }
+      };
+      x.open("GET", "http://localhost:3000/users");
+      x.send();
+    }
+
+    getAllUsers();
+
+
+    setDialogAndClicks = () => {
+      let rows = document.querySelectorAll('table tbody tr')
+      rows.forEach(r => {
+        r.onclick = ev => {
+          getPersonalDataForDialog(r)
+        }
+      })
+    }
+
+    getPersonalDataForDialog = r => {
+      let id = r.querySelector('td').textContent
+      location.href = '/user_form.html?id=' + id
+    }
+
+
+    function delsky(id, ev) {
+      ev.stopPropagation()
+
+      var x = new XMLHttpRequest();
+      x.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          alert(`status: ${this.status}, response: ${this.responseText}`)
+          location.reload();
+        }
+      };
+
+      x.open("DELETE", "http://localhost:3000/users/" + id);
+      //x.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+      x.send();
+
+    }
+
+  </script>
+
+</body>
+
+</html>

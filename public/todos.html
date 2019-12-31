@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Page Title</title>
+  <link rel='stylesheet' type='text/css' href='css/todos.css'>
+</head>
+
+<body>
+  <div id="todoapp">
+    <header>
+      <h1>Todos</h1>
+      <input id="new-todo" type="text" placeholder="What needs to be done?" onkeypress="addTodo(event)">
+    </header>
+
+    <section id="main">
+      <input id="toggle-all" type="checkbox">
+      <label for="toggle-all">Mark all as complete</label>
+      <ul id="todo-list">
+
+      </ul>
+    </section>
+  </div>
+
+  <div id="instructions">
+    Double-click to edit a todo.
+  </div>
+
+  <div id="credits">
+    Created by
+    <br />
+    <a href="">Tuvia Epstein</a>.
+
+  </div>
+
+  <script>
+    function addTodo(e) {
+      console.log(e);
+
+
+      if (e.key == "Enter") {
+        let item = document.getElementById('new-todo')
+        let newTodo = {
+/*           id: 18,
+ */       userId: 1,
+          title: item.value,
+          completed: false
+        }
+        console.log("this is the new todo", newTodo);
+
+        var x = new XMLHttpRequest();
+        x.onreadystatechange = function () {
+          if (this.readyState == 4) {
+            alert(`status: ${this.status}, response: ${this.responseText}`)
+          }
+        };
+        x.open("POST", "http://localhost:3000/todos");
+        x.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+        x.send(JSON.stringify(newTodo));
+      }
+    }
+
+    function getAllTodos() {
+      var x = new XMLHttpRequest();
+      x.onreadystatechange = function () {
+
+
+        /* if (this.readyState == 4) {
+          alert(`status: ${this.status}, response: ${this.responseText}`)
+        } */
+        if (this.readyState == 4 && this.status < 300) {
+          let theList = document.getElementById('todo-list')
+          let arr = JSON.parse(this.responseText);
+          arr.forEach(todo => {
+            theList.innerHTML += `<li> ${todo.title}</li>`
+          });
+        }
+
+      };
+      x.open("GET", "http://localhost:3000/todos");
+/*       x.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
+ */      x.send();
+    }
+    getAllTodos();
+  </script>
+</body>
+
+
+</html>
