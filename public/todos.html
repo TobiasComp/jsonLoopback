@@ -36,23 +36,20 @@
   <script>
     function addTodo(e) {
       console.log(e);
-
-
       if (e.key == "Enter") {
         let item = document.getElementById('new-todo')
         let newTodo = {
-/*           id: 18,
- */       userId: 1,
+          userId: 1,
           title: item.value,
           completed: false
         }
-        console.log("this is the new todo", newTodo);
-
         var x = new XMLHttpRequest();
         x.onreadystatechange = function () {
           if (this.readyState == 4) {
             alert(`status: ${this.status}, response: ${this.responseText}`)
           }
+          if (this.readyState == 4 && this.status < 300)
+            location.reload()
         };
         x.open("POST", "http://localhost:3000/todos");
         x.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
@@ -60,26 +57,63 @@
       }
     }
 
+    function deleteTodo(event, todoId) {
+      console.log("event", event);
+      console.log("the id of the todo to be erased", todoId);
+      var x = new XMLHttpRequest();
+      x.onreadystatechange = function () {
+        if (this.readyState == 4)
+          alert(`status: ${this.status}, response: ${this.responseText}`)
+        if (this.readyState == 4 && this.status < 300)
+          location.reload()
+      }
+      x.open("DELETE", "http://localhost:3000/todos/" + todoId);
+      x.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      x.send()
+    }
+
+    function editTodo(event, todoId) {
+      console.log("thisis the id", todoId);
+
+      console.log(event.target.checked);
+      console.log(event.target);
+      let todo = {
+
+        completed: event.target.checked
+      }
+
+      var x = new XMLHttpRequest();
+      x.onreadystatechange = function () {
+        if (this.readyState == 4)
+          alert(`status: ${this.status}, response: ${this.responseText}`)
+      }
+      x.open("PATCH", "http://localhost:3000/todos/" + todoId)
+      x.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+      x.send(JSON.stringify(todo))
+    }
+
+
     function getAllTodos() {
       var x = new XMLHttpRequest();
       x.onreadystatechange = function () {
-
-
-        /* if (this.readyState == 4) {
-          alert(`status: ${this.status}, response: ${this.responseText}`)
-        } */
         if (this.readyState == 4 && this.status < 300) {
           let theList = document.getElementById('todo-list')
           let arr = JSON.parse(this.responseText);
           arr.forEach(todo => {
-            theList.innerHTML += `<li> ${todo.title}</li>`
+            console.log(todo.completed);
+
+            theList.innerHTML += `<li>
+              <div class="view">
+                <input class="toggle" type="checkbox" onclick="editTodo(event, ${todo.id})">
+              <label>${todo.title}</label>
+              <a class="destroy" onclick="deleteTodo(event, ${todo.id})"></a>
+              </div>
+              </li>`
           });
         }
-
       };
       x.open("GET", "http://localhost:3000/todos");
-/*       x.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
- */      x.send();
+      x.send();
     }
     getAllTodos();
   </script>

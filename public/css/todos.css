@@ -65,3 +65,33 @@ li {
   display: list-item;
   text-align: -webkit-match-parent;
 }
+
+#todo-list li .view label {
+  word-break: break-word;
+}
+label {
+  cursor: default;
+}
+#todo-list {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+#todo-list .destroy {
+  position: absolute;
+  right: 5px;
+  top: 20px;
+  display: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background: url(https://backbonejs.org/examples/todos/destroy.png) no-repeat;
+}
+
+#todo-list li:hover .destroy {
+  display: block;
+}
+
+#todo-list .destroy:hover {
+  background-position: 0 -20px;
+}

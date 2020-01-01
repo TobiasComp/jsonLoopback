@@ -17,20 +17,20 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {Todos} from '../models';
-import {TodosRepository} from '../repositories';
+import { Todos } from '../models';
+import { TodosRepository } from '../repositories';
 
 export class TodoCtrlController {
   constructor(
     @repository(TodosRepository)
-    public todosRepository : TodosRepository,
-  ) {}
+    public todosRepository: TodosRepository,
+  ) { }
 
   @post('/todos', {
     responses: {
       '200': {
         description: 'Todos model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Todos)}},
+        content: { 'application/json': { schema: getModelSchemaRef(Todos) } },
       },
     },
   })
@@ -54,7 +54,7 @@ export class TodoCtrlController {
     responses: {
       '200': {
         description: 'Todos model count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -72,7 +72,7 @@ export class TodoCtrlController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(Todos, {includeRelations: true}),
+              items: getModelSchemaRef(Todos, { includeRelations: true }),
             },
           },
         },
@@ -89,7 +89,7 @@ export class TodoCtrlController {
     responses: {
       '200': {
         description: 'Todos PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -97,7 +97,7 @@ export class TodoCtrlController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Todos, {partial: true}),
+          schema: getModelSchemaRef(Todos, { partial: true }),
         },
       },
     })
@@ -113,7 +113,7 @@ export class TodoCtrlController {
         description: 'Todos model instance',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(Todos, {includeRelations: true}),
+            schema: getModelSchemaRef(Todos, { includeRelations: true }),
           },
         },
       },
@@ -138,7 +138,7 @@ export class TodoCtrlController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Todos, {partial: true}),
+          schema: getModelSchemaRef(Todos, { partial: true }),
         },
       },
     })
